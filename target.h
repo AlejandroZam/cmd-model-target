@@ -17,7 +17,7 @@ public:
     void loadConfig(const std::string& path) override;
     void seed(uint64_t s) override;
     void initialize() override;
-    void update() override;
+    void eventUpdate() override;
     void report() override;
 
     const Eigen::Vector3d& pos3() const { return pos_; }

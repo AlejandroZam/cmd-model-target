@@ -63,12 +63,10 @@ void Target::initialize() {
         logger_.open(outputDir + "/" + name, logFmt, outputSignals_);
 }
 
-void Target::update() {
+void Target::eventUpdate() {
     acc_.x() = noiseX_.sample();
     acc_.y() = noiseY_.sample();
     acc_.z() = 0.0;
-    pos_.z() = 0.0;
-    vel_.z() = 0.0;
 }
 
 void Target::report() {
