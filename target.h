@@ -1,6 +1,7 @@
 #pragma once
 #include "block.h"
 #include "trackable.h"
+#include "dds_pub.h"
 #include "noise.h"
 #include <Eigen/Dense>
 #include <string>
@@ -8,7 +9,7 @@
 
 // Constant-velocity ground vehicle (z = 0 enforced).
 // Noise channels noise.lateral_x / noise.lateral_y simulate terrain effects.
-// Implements Trackable so Missile can hold a Trackable* without knowing this type.
+// Publishes its state on DDS topic "sim.<name>.state" each report() call.
 class Target : public Block, public Trackable {
 public:
     Target();
@@ -29,8 +30,9 @@ private:
     Eigen::Vector3d pos0_ = Eigen::Vector3d::Zero();
     Eigen::Vector3d vel0_ = Eigen::Vector3d::Zero();
 
-    double   reportDt_ = 1.0;
-    Logger   logger_;
-    NoiseGen noiseX_, noiseY_;
+    double      reportDt_ = 1.0;
+    Logger      logger_;
+    SimPublisher publisher_;
+    NoiseGen    noiseX_, noiseY_;
     std::vector<std::string> outputSignals_;
 };

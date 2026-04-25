@@ -55,6 +55,8 @@ void Target::initialize() {
                     name.c_str(),
                     pos_.x(), pos_.y(), pos_.z(),
                     vel_.x(), vel_.y(), vel_.z());
+        publisher_.init("sim." + name + ".state");
+        std::printf("[%s] Publishing on DDS topic: sim.%s.state\n", name.c_str(), name.c_str());
     }
     logger_.close();
     if (!outputDir.empty())
@@ -70,6 +72,9 @@ void Target::update() {
 }
 
 void Target::report() {
+    StateMsg msg{State::t, pos_.x(), pos_.y(), pos_.z(), vel_.x(), vel_.y(), vel_.z()};
+    publisher_.publish(msg);
+
     if (State::sample(reportDt_) || State::tickfirst || State::ticklast) {
         std::printf("[%s] t=%7.3f  pos=(%8.1f, %7.1f, %5.1f)  vel=(%6.2f, %6.2f, %5.2f)\n",
                     name.c_str(), State::t,
