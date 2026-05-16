@@ -8,13 +8,13 @@ if(NOT TARGET osk)
     find_package(osk 1.0.0 REQUIRED)
 endif()
 
-add_library(model_target STATIC target.cpp)
+add_library(model_target STATIC src/target.cpp)
 target_include_directories(model_target PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(model_target PUBLIC osk)
 
 install(TARGETS model_target EXPORT model_target-targets ARCHIVE DESTINATION lib)
-install(FILES target.h            DESTINATION include)
-install(FILES default_params.yaml DESTINATION share/cmd-model-target)
+install(FILES include/target.h           DESTINATION include)
+install(FILES Config/default_params.yaml DESTINATION share/cmd-model-target)

@@ -1,6 +1,8 @@
 #include "target.h"
 #include "sim.h"
 #include "yaml_eigen.h"
+#include "viz_bridge.h"
+#include "montecarlo.h"
 #include <yaml-cpp/yaml.h>
 #include <cstdio>
 
@@ -72,6 +74,10 @@ void Target::eventUpdate() {
 void Target::report() {
     StateMsg msg{State::t, pos_.x(), pos_.y(), pos_.z(), vel_.x(), vel_.y(), vel_.z()};
     publisher_.publish(msg);
+    VizBridge::get().send(VizBridge::ENTITY_TARGET,
+                          static_cast<uint16_t>(MonteCarlo::currentRun),
+                          State::t, pos_.x(), pos_.y(), pos_.z(),
+                          vel_.x(), vel_.y(), vel_.z());
 
     if (State::sample(reportDt_) || State::tickfirst || State::ticklast) {
         std::printf("[%s] t=%7.3f  pos=(%8.1f, %7.1f, %5.1f)  vel=(%6.2f, %6.2f, %5.2f)\n",
